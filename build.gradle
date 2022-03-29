@@ -1,0 +1,41 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    ext {
+        compileSdkVersion = 31
+        minSdkVersion = 23
+        targetSdkVersion = 31
+        supportLibVersion = '1.4.1'
+        coreVersion = '1.7.0'
+        recyclerViewVersion = '1.2.1'
+        constraintLayoutVersion = '2.1.3'
+        materialVersion = '1.5.0'
+        navigationVersion = '2.4.1'
+        lifecycleVersion = '2.4.1'
+        roomVersion = '2.4.2'
+        pagingVersion = '3.1.1'
+        retrofitVersion = '2.9.0'
+        okhttpLoggingInterceptorVersion = '4.9.0'
+        coroutines = '1.5.2'
+        hiltVersion = '2.38.1'
+        coilVersion = '1.3.2'
+        timberVersion = '5.0.1'
+        workVersion = '2.6.0'
+        preferencesDatastore = '1.0.0-alpha01'
+        jacocoVersion = '0.8.7'
+        detectVersion = '1.18.0-RC2'
+    }
+    dependencies {
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hiltVersion"
+        classpath "org.jacoco:org.jacoco.core:$jacocoVersion"
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detectVersion"
+    }
+}
+plugins {
+    id 'com.android.application' version '7.1.2' apply false
+    id 'com.android.library' version '7.1.2' apply false
+    id 'org.jetbrains.kotlin.android' version '1.6.10' apply false
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

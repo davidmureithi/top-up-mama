@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Top Up Mama</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="weather">Weather</string>
+    <string name="favourites">Favourites</string>
+    <string name="more">More</string>
+    <string name="skip">Skip</string>
+
+    <string name="welcome_to_the_make_up_app">Welcome to the make up App</string>
+    <string name="you_will_be_able_to_browse_from_a_large_category_of_make_up_sorted_by_brand">You will be able to browse from a large category of make up sorted by brand.</string>
+    <string name="work_manager_datastore_viewmodel_livedata_kotlin_flows_kotlin_coroutines_room">Work Manager, Datastore, ViewModel, Livedata, Kotlin Flows, Kotlin Coroutines, Room</string>
+    <string name="i_used_mvvm_some_of_the_components_you_ll_find_are">I used MVVM. Some of the components you\'ll find are</string>
+    <string name="dependency_injection_leak_canary_chucker_stetho_retrofit_coil_jacoco_static_code_analysers_ktlint">Dependency Injection, Leak Canary, Chucker, Stetho, Retrofit, Coil, Jacoco, Static Code Analysers - ktlint</string>
+    <string name="some_libraries_and_tools_and_techniques_used_include">Some libraries, tools and techniques used include</string>
+    <string name="lets_jump_right_in">Lets jump right in :)</string>
+    <string name="well_that_was_our_apps_intro">Well that was our apps\' intro</string>
+
+    <string name="no_accessibility">dw</string>
+    <string name="name">Nairobi, Kenya</string>
+    <string name="date">Mon, 28 March, 2022</string>
+    <string name="time">6:58PM</string>
+    <string name="temperature">25&#xb0;</string>
+    <string name="currentTemperature">%s&#xb0;</string>
+    <string name="night_mode">Night mode</string>
+    <string name="start">Start</string>
+    <string name="currentLocation">%s, %s</string>
+    <string name="moreAbout">More About %s</string>
+    <string name="searchUrl">https://www.google.com/search?q=%s</string>
+</resources>
