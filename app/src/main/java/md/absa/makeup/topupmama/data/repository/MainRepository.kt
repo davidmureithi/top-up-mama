@@ -1,6 +1,5 @@
 package md.absa.makeup.topupmama.data.repository
 
-import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
 import md.absa.makeup.topupmama.data.api.response.WeatherResponse
 import md.absa.makeup.topupmama.model.FavouriteCity
@@ -25,4 +24,5 @@ interface MainRepository {
 
     suspend fun unFavouriteCity(favouriteCity: FavouriteCity)
 
+    suspend fun fetchDataByQuery(query: String): List<WeatherData>?
 }

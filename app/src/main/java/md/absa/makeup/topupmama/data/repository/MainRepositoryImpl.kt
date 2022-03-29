@@ -64,4 +64,7 @@ open class MainRepositoryImpl @Inject constructor(
 
     override fun fetchCityWeatherData(id: Int) =
         appDatabase.weatherDataDao().fetchCityWeatherData(id)
+
+    override suspend fun fetchDataByQuery(query: String) =
+        appDatabase.weatherDataDao().fetchDataByQueryAsync(query)
 }

@@ -27,6 +27,9 @@ object Constants {
     private const val JUBA_CITY: String = "373303"
     private const val ADDIS_ABABA_CITY: String = "344979"
     private const val LUSAKA_CITY: String = "909137"
+    private const val LUANDA_CITY: String = "2240449"
+    private const val LONDON_CITY: String = "2643743"
+    private const val PARIS_CITY: String = "2968815"
 
     val CITY_LIST = listOf(
         NAIROBI_CITY,
@@ -45,6 +48,9 @@ object Constants {
         LILONGWE_CITY,
         JUBA_CITY,
         ADDIS_ABABA_CITY,
-        LUSAKA_CITY
+        LUSAKA_CITY,
+        LUANDA_CITY,
+        LONDON_CITY,
+        PARIS_CITY
     )
 }

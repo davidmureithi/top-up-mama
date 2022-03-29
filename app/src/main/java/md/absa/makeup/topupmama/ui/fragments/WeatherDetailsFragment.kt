@@ -63,6 +63,9 @@ class WeatherDetailsFragment : Fragment() {
         )
         binding.date.text = Utils.getDate(weatherData.dt!!.toLong())
         binding.time.text = Utils.getTime(weatherData.dt.toLong())
+        binding.sunriseTime.text = Utils.getTime(weatherData.sys!!.sunrise.toLong())
+        binding.sunsetTime.text = Utils.getTime(weatherData.sys.sunset.toLong())
+
         binding.temperature.text = String.format(
             requireActivity().getString(R.string.currentTemperature),
             weatherData.main!!.temp

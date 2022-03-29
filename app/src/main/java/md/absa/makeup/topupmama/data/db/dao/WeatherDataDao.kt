@@ -26,4 +26,8 @@ interface WeatherDataDao : BaseDao<WeatherData> {
 
     @Query("UPDATE weather_data SET isFavourite = 0 WHERE id=:id")
     fun setNotFavourite(id: Int?)
+
+    @Query("SELECT * FROM weather_data WHERE name LIKE '%' || :query || '%'")
+    suspend fun fetchDataByQueryAsync(query: String): List<WeatherData>
+
 }
