@@ -1,6 +1,7 @@
 package md.absa.makeup.topupmama.ui.adapters
 
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import md.absa.makeup.topupmama.model.WeatherData
 import md.absa.makeup.topupmama.ui.adapters.listener.OnClickListener
@@ -13,8 +14,7 @@ class WeatherAdapter(
         return WeatherViewHolder.create(parent)
     }
 
-//    private val dataList: List<WeatherData?> =
-    private var dataList = mutableListOf<WeatherData?>()
+    private var dataList = emptyList<WeatherData>()
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
         val data: WeatherData? = dataList[position]
@@ -27,9 +27,14 @@ class WeatherAdapter(
         return dataList.size
     }
 
-    fun updateData(data: List<WeatherData?>) {
-        dataList.clear()
-        dataList.addAll(data)
-        notifyDataSetChanged()
+    fun updateData(newDataList: List<WeatherData>) {
+//        dataList.clear()
+//        dataList.addAll(data)
+//        notifyDataSetChanged()
+
+        val tumDiffUtils = TumDiffUtils(dataList, newDataList)
+        val diffUtilsResult = DiffUtil.calculateDiff(tumDiffUtils)
+        dataList = newDataList
+        diffUtilsResult.dispatchUpdatesTo(this)
     }
 }

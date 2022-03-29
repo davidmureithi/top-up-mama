@@ -37,4 +37,5 @@
     <string name="sunset">Sunset</string>
     <string name="sunrise">Sunrise</string>
     <string name="startSearching">Start Typing…</string>
+    <string name="no_internet">You are not connected. View cached weather data</string>
 </resources>

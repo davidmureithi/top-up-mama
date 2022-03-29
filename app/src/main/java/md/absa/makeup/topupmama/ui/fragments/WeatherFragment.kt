@@ -1,5 +1,6 @@
 package md.absa.makeup.topupmama.ui.fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,20 +10,14 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
+import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import md.absa.makeup.topupmama.R
 import md.absa.makeup.topupmama.common.ConnectionLiveData
 import md.absa.makeup.topupmama.common.Utils
-import md.absa.makeup.topupmama.data.api.resource.Status
 import md.absa.makeup.topupmama.databinding.FragmentWeatherBinding
 import md.absa.makeup.topupmama.model.FavouriteCity
 import md.absa.makeup.topupmama.model.WeatherData
@@ -38,6 +33,7 @@ class WeatherFragment : Fragment() {
     private var _binding: FragmentWeatherBinding? = null
     private val binding get() = _binding!!
     private lateinit var connectionLiveData: ConnectionLiveData
+    private lateinit var weatherAdapter: WeatherAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,92 +49,22 @@ class WeatherFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as AppCompatActivity).supportActionBar?.title = "Weather Data"
 
+        initializeAdapter()
+
         connectionLiveData = ConnectionLiveData(requireActivity())
 
-        observeConnection()
-    }
-
-    private fun observeConnection() {
-        connectionLiveData.observe(viewLifecycleOwner) { isAvailable ->
-            when (isAvailable) {
-                true -> {
-                    viewModel.onFragmentReady()
-                    binding.recyclerView.visibility = View.VISIBLE
-                    binding.search.visibility = View.VISIBLE
-                    observeWeatherData()
-                }
-                false -> {
-                    Snackbar.make(
-                        binding.root,
-                        "You are not connected. View cached weather data",
-                        LENGTH_LONG
-                    ).show()
-                    binding.recyclerView.visibility = View.GONE
-                    binding.search.visibility = View.GONE
-                    collectFlowData()
-                }
+        connectionLiveData.observe(
+            viewLifecycleOwner,
+            Observer { isAvailable ->
+                observeConnection(isAvailable)
             }
-        }
+        )
+
+        observeWeatherData()
     }
 
-    private fun observeWeatherData() {
-        viewModel.weatherLiveData.observe(viewLifecycleOwner) { response ->
-            when (response.status) {
-                Status.LOADING -> {
-                    binding.progressBar.visibility = View.VISIBLE
-                    binding.search.visibility = View.GONE
-                }
-                Status.SUCCESS -> {
-                    binding.progressBar.visibility = View.GONE
-                    binding.search.visibility = View.VISIBLE
-                    response.data?.let { data ->
-                        Snackbar.make(
-                            binding.root,
-                            response.message.toString(),
-                            LENGTH_LONG
-                        ).show()
-                    }
-                    collectFlowData()
-                }
-                Status.ERROR -> {
-                    binding.progressBar.visibility = View.GONE
-                    binding.search.visibility = View.GONE
-                    Snackbar.make(
-                        binding.root,
-                        response.message.toString(),
-                        LENGTH_LONG
-                    ).show()
-                    Timber.e(response.toString())
-                }
-            }
-        }
-    }
-
-    private fun collectFlowData() {
-        viewModel.collectWeatherData()
-            .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-            .onEach {
-                if (it.isNotEmpty()) {
-                    binding.recyclerView.visibility = View.VISIBLE
-                    binding.progressBar.visibility = View.GONE
-                    setupRecyclerView(it)
-                } else {
-                    delay(1000L)
-                    Snackbar.make(
-                        binding.root,
-                        "No data found",
-                        LENGTH_LONG
-                    ).show()
-                    binding.recyclerView.visibility = View.GONE
-                }
-            }
-            .launchIn(lifecycleScope)
-    }
-
-    private fun setupRecyclerView(dataList: List<WeatherData?>?) {
-        binding.search.addTextChangedListener(searchTextWatcher)
-
-        val adapter = WeatherAdapter(
+    private fun initializeAdapter() {
+        weatherAdapter = WeatherAdapter(
             OnClickListener { weatherData ->
                 val favouriteCity = FavouriteCity(
                     id = weatherData.id,
@@ -151,15 +77,75 @@ class WeatherFragment : Fragment() {
                 }
             }
         )
-        adapter.updateData(dataList!!)
+    }
+
+    private fun observeConnection(isAvailable: Boolean) {
+        when (isAvailable) {
+            true -> {
+                viewModel.fetchLatestData()
+            }
+            false -> {
+                Snackbar.make(
+                    binding.root,
+                    R.string.no_internet,
+                    LENGTH_INDEFINITE
+                ).setTextColor(Color.RED).show()
+                viewModel.fetchCachedData()
+            }
+        }
+    }
+
+    private fun observeWeatherData() {
+        viewModel.weatherMediatorData.observe(
+            viewLifecycleOwner,
+            Observer { response ->
+                Timber.e("MEDIATOR : $response")
+                setupRecyclerView(response)
+            }
+        )
+
+//        viewModel.weatherLiveData.observe(viewLifecycleOwner) { response ->
+//            when (response.status) {
+//                Status.LOADING -> {
+//                    binding.progressBar.visibility = View.VISIBLE
+//                    binding.search.visibility = View.GONE
+//                }
+//                Status.SUCCESS -> {
+//                    binding.progressBar.visibility = View.GONE
+//                    binding.search.visibility = View.VISIBLE
+//                    response.data?.let { data ->
+//                        Snackbar.make(
+//                            binding.root,
+//                            response.message.toString(),
+//                            LENGTH_LONG
+//                        ).show()
+//                    }
+//                    collectFlowData()
+//                }
+//                Status.ERROR -> {
+//                    binding.progressBar.visibility = View.GONE
+//                    binding.search.visibility = View.GONE
+//                    Snackbar.make(
+//                        binding.root,
+//                        response.message.toString(),
+//                        LENGTH_LONG
+//                    ).show()
+//                    Timber.e(response.toString())
+//                }
+//            }
+//        }
+    }
+
+    private fun setupRecyclerView(dataList: List<WeatherData>) {
+        binding.recyclerView.visibility = View.VISIBLE
+        binding.search.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.GONE
+
+        binding.search.addTextChangedListener(searchTextWatcher)
+        weatherAdapter.updateData(dataList)
         binding.recyclerView.layoutManager = LinearLayoutManager(requireActivity())
         binding.recyclerView.hasFixedSize()
-        binding.recyclerView.adapter = adapter
-
-        viewModel.weatherMediatorData.observe(viewLifecycleOwner) {
-            Timber.e("MEDIATOR : $")
-            adapter.updateData(it)
-        }
+        binding.recyclerView.adapter = weatherAdapter
     }
 
     override fun onDestroyView() {
