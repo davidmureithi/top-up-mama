@@ -12,4 +12,7 @@
     <color name="textColor">#FF000000</color>
     <color name="textColorLight">#808080</color>
     <color name="textColorBright">#FFFFFFFF</color>
+    <color name="weatherBlue">#4075D0</color>
+
+
 </resources>

@@ -9,6 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import md.absa.makeup.topupmama.common.Constants
+import md.absa.makeup.topupmama.data.api.resource.NetworkResource
 import md.absa.makeup.topupmama.data.repository.MainRepositoryImpl
 import md.absa.makeup.topupmama.model.FavouriteCity
 import md.absa.makeup.topupmama.model.WeatherData
@@ -25,13 +26,13 @@ class MainViewModel @Inject constructor(
 
     private val _searchFieldTextLiveData = MutableLiveData<String>()
 
-    private var _searchWeatherLiveData: MutableLiveData<List<WeatherData>> = MutableLiveData()
-    var searchWeatherLiveData: LiveData<List<WeatherData>> = _searchWeatherLiveData
+    private var _searchWeatherLiveData: MutableLiveData<NetworkResource<List<WeatherData>>> = MutableLiveData()
+    private var searchWeatherLiveData: LiveData<NetworkResource<List<WeatherData>>> = _searchWeatherLiveData
 
-    private var _weatherLiveData: MutableLiveData<List<WeatherData>> = MutableLiveData()
-    private val weatherLiveData: LiveData<List<WeatherData>> = _weatherLiveData
+    private var _weatherLiveData: MutableLiveData<NetworkResource<List<WeatherData>>> = MutableLiveData()
+    private val weatherLiveData: LiveData<NetworkResource<List<WeatherData>>> = _weatherLiveData
 
-    val weatherMediatorData = MediatorLiveData<List<WeatherData>>()
+    val weatherMediatorData = MediatorLiveData<NetworkResource<List<WeatherData>>>()
 
     init {
 
@@ -50,30 +51,27 @@ class MainViewModel @Inject constructor(
 
     private fun fetchWeatherData(cities: String, unit: String, appId: String) =
         viewModelScope.launch(Dispatchers.IO) {
-//            _weatherLiveData.postValue(NetworkResource.loading(message = "Loading"))
+            _weatherLiveData.postValue(NetworkResource.loading(message = "Loading"))
             kotlin.runCatching {
                 repositoryImpl.fetchWeatherData(cities = cities, unit = unit, appId = appId)
             }.onSuccess { response ->
                 if (response.isSuccessful) {
                     fetchCachedData()
                 }
-//                _weatherLiveData.postValue(response.body()?.list)
-//                _weatherLiveData.postValue(NetworkResource.success(data = response.body()!!.list))
             }.onFailure { error ->
-//                _weatherLiveData.postValue(NetworkResource.error(message = error.message ?: "Some error occurred"))
+                _weatherLiveData.postValue(NetworkResource.error(message = error.message ?: "Some error occurred"))
             }
         }
 
-    private fun fetchWeatherByQuery(query: String): LiveData<List<WeatherData>> {
+    private fun fetchWeatherByQuery(query: String): LiveData<NetworkResource<List<WeatherData>>> {
         viewModelScope.launch(Dispatchers.IO) {
-            //            _searchWeatherLiveData.postValue(NetworkResource.loading(message = "Loading"))
+            _searchWeatherLiveData.postValue(NetworkResource.loading(message = "Loading"))
             kotlin.runCatching {
                 repositoryImpl.fetchDataByQuery(query)
             }.onSuccess { response ->
-                _searchWeatherLiveData.postValue(response)
-                //                _searchWeatherLiveData.postValue(NetworkResource.success(data = response.body()!!.list))
+                _searchWeatherLiveData.postValue(NetworkResource.success(data = response))
             }.onFailure { error ->
-                //                _searchWeatherLiveData.postValue(NetworkResource.error(message = error.message ?: "Some error occurred"))
+                _searchWeatherLiveData.postValue(NetworkResource.error(message = error.message ?: "Some error occurred"))
             }
         }
         return _searchWeatherLiveData
@@ -118,7 +116,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun fetchLatestData() {
-        if (weatherLiveData.value.isNullOrEmpty()) {
+        if (weatherLiveData.value?.data.isNullOrEmpty()) {
             fetchWeatherData(
                 cities = getCities(),
                 unit = "metric",
@@ -130,7 +128,7 @@ class MainViewModel @Inject constructor(
     fun fetchCachedData() {
         viewModelScope.launch {
             repositoryImpl.collectWeatherData().collect {
-                _weatherLiveData.value = it
+                _weatherLiveData.postValue(NetworkResource.success(data = it))
             }
         }
     }

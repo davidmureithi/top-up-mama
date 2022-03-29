@@ -2,6 +2,8 @@ package md.absa.makeup.topupmama.common
 
 object Constants {
     const val MAIN_URL: String = "https://api.openweathermap.org/"
+
+    // fixme Remove the API KEY
     const val appId: String = "1304fcde9f2e9c1b0c1c81d999bdd919"
 
     const val DATABASE_NAME: String = "top_up_mama_database"

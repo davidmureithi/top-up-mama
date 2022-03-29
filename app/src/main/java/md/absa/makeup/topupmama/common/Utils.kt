@@ -62,6 +62,7 @@ object Utils {
         return formatter.format(date)
     }
 
+    @SuppressLint("SimpleDateFormat")
     fun getDate(timestamp: Long): CharSequence? {
         val c = Calendar.getInstance()
         c.timeInMillis = (timestamp * 1000L)
@@ -70,6 +71,7 @@ object Utils {
         return sdf.format(d)
     }
 
+    @SuppressLint("SimpleDateFormat")
     fun getTime(timestamp: Long): CharSequence? {
         val c = Calendar.getInstance()
         c.timeInMillis = timestamp * 1000L
@@ -101,10 +103,5 @@ object Utils {
                 context.resources.getDrawable(R.drawable.clear_3x)
             }
         }
-    }
-
-    fun isConnected(): Boolean {
-//        return false
-        return true
     }
 }

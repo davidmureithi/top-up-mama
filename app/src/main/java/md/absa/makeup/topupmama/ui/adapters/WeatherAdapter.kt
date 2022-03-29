@@ -17,10 +17,8 @@ class WeatherAdapter(
     private var dataList = emptyList<WeatherData>()
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
-        val data: WeatherData? = dataList[position]
-        if (data != null) {
-            holder.bind(data, clickListener)
-        }
+        val data: WeatherData = dataList[position]
+        holder.bind(data, clickListener)
     }
 
     override fun getItemCount(): Int {
@@ -28,10 +26,6 @@ class WeatherAdapter(
     }
 
     fun updateData(newDataList: List<WeatherData>) {
-//        dataList.clear()
-//        dataList.addAll(data)
-//        notifyDataSetChanged()
-
         val tumDiffUtils = TumDiffUtils(dataList, newDataList)
         val diffUtilsResult = DiffUtil.calculateDiff(tumDiffUtils)
         dataList = newDataList

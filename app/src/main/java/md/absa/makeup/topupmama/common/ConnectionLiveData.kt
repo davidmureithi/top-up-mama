@@ -13,8 +13,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-const val TAG = "C-Manager"
-
 /**
  * Save all available networks with an internet connection to a set (@validNetworks).
  * As long as the size of the set > 0, this LiveData emits true.

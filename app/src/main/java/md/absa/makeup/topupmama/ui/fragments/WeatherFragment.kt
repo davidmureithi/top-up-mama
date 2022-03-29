@@ -13,11 +13,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
+import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import md.absa.makeup.topupmama.R
 import md.absa.makeup.topupmama.common.ConnectionLiveData
 import md.absa.makeup.topupmama.common.Utils
+import md.absa.makeup.topupmama.data.api.resource.Status
 import md.absa.makeup.topupmama.databinding.FragmentWeatherBinding
 import md.absa.makeup.topupmama.model.FavouriteCity
 import md.absa.makeup.topupmama.model.WeatherData
@@ -99,41 +101,35 @@ class WeatherFragment : Fragment() {
         viewModel.weatherMediatorData.observe(
             viewLifecycleOwner,
             Observer { response ->
-                Timber.e("MEDIATOR : $response")
-                setupRecyclerView(response)
+                when (response.status) {
+                    Status.LOADING -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                        binding.search.visibility = View.GONE
+                    }
+                    Status.SUCCESS -> {
+                        setupRecyclerView(response.data!!)
+                        Timber.e("MEDIATOR : $response")
+                        response.data.let {
+                            Snackbar.make(
+                                binding.root,
+                                response.message.toString(),
+                                LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                    Status.ERROR -> {
+                        binding.progressBar.visibility = View.GONE
+                        binding.search.visibility = View.GONE
+                        Snackbar.make(
+                            binding.root,
+                            response.message.toString(),
+                            LENGTH_LONG
+                        ).show()
+                        Timber.e(response.toString())
+                    }
+                }
             }
         )
-
-//        viewModel.weatherLiveData.observe(viewLifecycleOwner) { response ->
-//            when (response.status) {
-//                Status.LOADING -> {
-//                    binding.progressBar.visibility = View.VISIBLE
-//                    binding.search.visibility = View.GONE
-//                }
-//                Status.SUCCESS -> {
-//                    binding.progressBar.visibility = View.GONE
-//                    binding.search.visibility = View.VISIBLE
-//                    response.data?.let { data ->
-//                        Snackbar.make(
-//                            binding.root,
-//                            response.message.toString(),
-//                            LENGTH_LONG
-//                        ).show()
-//                    }
-//                    collectFlowData()
-//                }
-//                Status.ERROR -> {
-//                    binding.progressBar.visibility = View.GONE
-//                    binding.search.visibility = View.GONE
-//                    Snackbar.make(
-//                        binding.root,
-//                        response.message.toString(),
-//                        LENGTH_LONG
-//                    ).show()
-//                    Timber.e(response.toString())
-//                }
-//            }
-//        }
     }
 
     private fun setupRecyclerView(dataList: List<WeatherData>) {

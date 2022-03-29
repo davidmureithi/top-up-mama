@@ -125,7 +125,7 @@ class WelcomeFragment : Fragment() {
     }
 
     private fun addBottomDots(currentPage: Int) {
-        var dots = arrayOfNulls<TextView>(layouts!!.size)
+        val dots = arrayOfNulls<TextView>(layouts!!.size)
         val colorsActive = resources.getIntArray(R.array.array_dot_active)
         val colorsInactive = resources.getIntArray(R.array.array_dot_inactive)
         binding.layoutDots.removeAllViews()

@@ -21,18 +21,18 @@ class TumDiffUtils(
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-       return when {
-           oldList[oldItemPosition].id != newList[newItemPosition].id -> {
-               false
-           }
-           oldList[oldItemPosition].name != newList[newItemPosition].name -> {
-               false
-           }
-           oldList[oldItemPosition].isFavourite != newList[newItemPosition].isFavourite -> {
-               false
-           }
-           // Skipped the rest coz I don't expect them to change
-           else -> true
-       }
+        return when {
+            oldList[oldItemPosition].id != newList[newItemPosition].id -> {
+                false
+            }
+            oldList[oldItemPosition].name != newList[newItemPosition].name -> {
+                false
+            }
+            oldList[oldItemPosition].isFavourite != newList[newItemPosition].isFavourite -> {
+                false
+            }
+            // Skipped the rest coz I don't expect them to change
+            else -> true
+        }
     }
 }
