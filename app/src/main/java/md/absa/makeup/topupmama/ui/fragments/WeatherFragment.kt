@@ -17,7 +17,7 @@ import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import md.absa.makeup.topupmama.R
-import md.absa.makeup.topupmama.common.ConnectionLiveData
+import md.absa.makeup.topupmama.common.connection.ConnectionLiveData
 import md.absa.makeup.topupmama.common.Utils
 import md.absa.makeup.topupmama.data.api.resource.Status
 import md.absa.makeup.topupmama.databinding.FragmentWeatherBinding

@@ -16,7 +16,7 @@ open class MainRepositoryImpl @Inject constructor(
         retrofitInterface.fetchWeatherData(id = cities, units = unit, appId = appId).also {
             if (it.isSuccessful) {
                 val list = mutableListOf<WeatherData>()
-                val favourites = appDatabase.favouriteCityDao().getAll()
+                val favourites = getFavouriteCities()
                 if (favourites.isNotEmpty()) {
                     for (favourite in favourites) {
                         for (item in it.body()?.list!!) {
@@ -58,6 +58,9 @@ open class MainRepositoryImpl @Inject constructor(
 
     override suspend fun setNotFavourite(id: Int) =
         appDatabase.weatherDataDao().setNotFavourite(id)
+
+    override suspend fun getFavouriteCities() =
+        appDatabase.favouriteCityDao().getAll()
 
     override fun collectWeatherData() =
         appDatabase.weatherDataDao().collectWeatherData()

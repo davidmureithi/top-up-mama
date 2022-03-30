@@ -16,7 +16,7 @@
 
     <string name="welcome_to_the_make_up_app">Welcome to Top-up-Mama App</string>
     <string name="you_will_be_able_to_browse_from_a_large_category_of_make_up_sorted_by_brand">You will be able to browse from a large category of weather data sorted by favourite.</string>
-    <string name="work_manager_datastore_viewmodel_livedata_kotlin_flows_kotlin_coroutines_room">Datastore, ViewModel, Livedata, Kotlin Flows, Kotlin Coroutines, Room</string>
+    <string name="work_manager_datastore_viewmodel_livedata_kotlin_flows_kotlin_coroutines_room">Work Manager, Datastore, ViewModel, Livedata, Kotlin Flows, Kotlin Coroutines, Room</string>
     <string name="i_used_mvvm_some_of_the_components_you_ll_find_are">I used MVVM. Some of the components you\'ll find are</string>
     <string name="dependency_injection_leak_canary_chucker_stetho_retrofit_coil_jacoco_static_code_analysers_ktlint">Dependency Injection, Leak Canary, Chucker, Stetho, Retrofit, Coil, Jacoco, Static Code Analysers - ktlint</string>
     <string name="some_libraries_and_tools_and_techniques_used_include">Some libraries, tools and techniques used include</string>

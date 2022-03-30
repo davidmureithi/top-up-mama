@@ -9,11 +9,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import md.absa.makeup.topupmama.common.Constants
+import md.absa.makeup.topupmama.common.Utils
 import md.absa.makeup.topupmama.data.api.resource.NetworkResource
 import md.absa.makeup.topupmama.data.repository.MainRepositoryImpl
 import md.absa.makeup.topupmama.model.FavouriteCity
 import md.absa.makeup.topupmama.model.WeatherData
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -77,13 +77,6 @@ class MainViewModel @Inject constructor(
         return _searchWeatherLiveData
     }
 
-    private fun getCities(): String {
-        val cities = Constants.CITY_LIST
-        val citiesString = TextUtils.join(",", cities)
-        Timber.e("Cities String $citiesString")
-        return citiesString
-    }
-
     fun favouriteCity(favouriteCity: FavouriteCity) =
         viewModelScope.launch(Dispatchers.IO) {
             repositoryImpl.favouriteCity(favouriteCity)
@@ -118,7 +111,7 @@ class MainViewModel @Inject constructor(
     fun fetchLatestData() {
         if (weatherLiveData.value?.data.isNullOrEmpty()) {
             fetchWeatherData(
-                cities = getCities(),
+                cities = Utils.getCities(),
                 unit = "metric",
                 appId = Constants.appId
             )

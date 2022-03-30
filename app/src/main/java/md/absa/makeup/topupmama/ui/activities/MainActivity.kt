@@ -1,5 +1,6 @@
 package md.absa.makeup.topupmama.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -16,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import md.absa.makeup.topupmama.R
 import md.absa.makeup.topupmama.databinding.ActivityMainBinding
 import md.absa.makeup.topupmama.ui.viewmodels.StoreViewModel
+import md.absa.makeup.topupmama.workers.NotificationWorker
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -106,5 +108,18 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkIntent(intent)
+    }
+
+    private fun checkIntent(intent: Intent?) {
+        intent?.let {
+            if (it.hasExtra(NotificationWorker.NOTIFICATION_EXTRA)) {
+                val id = it.getStringExtra(NotificationWorker.NOTIFICATION_ID_KEY)
+            }
+        }
     }
 }

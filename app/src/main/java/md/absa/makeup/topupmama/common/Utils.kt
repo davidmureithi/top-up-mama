@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.location.LocationManager
 import android.os.Build
+import android.text.TextUtils
 import android.view.Window
 import android.view.WindowManager
 import androidx.core.view.WindowCompat
@@ -18,6 +19,11 @@ import java.util.*
 private const val conveter: Double = 273.15
 
 object Utils {
+
+    fun getCities(): String {
+        val cities = Constants.CITY_LIST
+        return TextUtils.join(",", cities)
+    }
 
     /**
      * Coloring the status bar

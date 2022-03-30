@@ -1,4 +1,4 @@
-package md.absa.makeup.topupmama.common
+package md.absa.makeup.topupmama.common.connection
 
 import timber.log.Timber
 import java.io.IOException
